@@ -1,0 +1,19 @@
+setting->setup
+
+quick-> app manager
+
+->> new lightning app
+
+
+1.authrization form text
+2.categories
+3.communication suscribtion channel type
+4.contacts
+5.content
+6.duplicate record sets
+7. quick text
+8.recommendation
+
+
+
+-> account -> new-> upload files

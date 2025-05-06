@@ -1,0 +1,20 @@
+public class mithilesh322 {
+    
+    // Static method to increment the input by 10 and return result
+    public static Integer incrementByTen(Integer inputVal) {
+        Integer result = inputVal + 10;
+        System.debug('Input: ' + inputVal + ', Incremented Value: ' + result);
+        return result;
+    }
+}
+
+
+
+
+
+
+
+// Open Developer Console -> Debug -> Open Execute Anonymous Window
+Integer originalValue = 25;
+Integer incrementedValue = mithilesh322.incrementByTen(originalValue);
+System.debug('Final Result: ' + incrementedValue);
