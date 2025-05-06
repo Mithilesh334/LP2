@@ -1,0 +1,91 @@
+from collections import defaultdict
+
+# Recursive DFS to visit all vertices
+def dfs_recursive(graph, vertex, visited=None):
+    if visited is None:
+        visited = set()
+    
+    print(vertex)
+    visited.add(vertex)
+    
+    for neighbor in graph[vertex]:
+        if neighbor not in visited:
+            dfs_recursive(graph, neighbor, visited)
+
+# Recursive DFS to find a path from start to goal
+def dfs_path_recursive(graph, current, goal, visited=None, path=None):
+    if visited is None:
+        visited = set()
+    if path is None:
+        path = []
+
+    visited.add(current)
+    path.append(current)
+
+    if current == goal:
+        return path  # path found
+
+    for neighbor in graph[current]:
+        if neighbor not in visited:
+            result = dfs_path_recursive(graph, neighbor, goal, visited, path)
+            if result:  # path found
+                return result
+
+    path.pop()  # backtrack
+    return None
+
+# Input graph dynamically
+def build_graph():
+    graph = defaultdict(set)
+    num_vertices = int(input("Enter the number of vertices: "))
+
+    for _ in range(num_vertices):
+        vertex = input("Enter vertex: ")
+        neighbors = input(f"Enter neighbors of {vertex} (space-separated): ").split()
+        for neighbor in neighbors:
+            graph[vertex].add(neighbor)
+            graph[neighbor].add(vertex)  # undirected graph
+
+    return graph
+
+# Main program
+if __name__ == "__main__":
+    print("Mithilesh Awate")
+    print("Roll No. TBCO22116")
+
+    graph = build_graph()
+    start_vertex = input("Enter the starting vertex for DFS: ")
+    goal_vertex = input("Enter the goal vertex: ")
+
+    print("\nRecursive DFS traversal (visiting all nodes):")
+    dfs_recursive(graph, start_vertex)
+
+    print("\nDFS path to goal:")
+    path = dfs_path_recursive(graph, start_vertex, goal_vertex)
+    if path:
+        print("Path to goal:", path)
+    else:
+        print("Goal not reachable from start.")
+
+
+
+
+
+
+OP---------
+
+
+
+Enter the number of vertices: 5
+Enter vertex: A
+Enter neighbors of A (space-separated): B C
+Enter vertex: B
+Enter neighbors of B (space-separated): A D
+Enter vertex: C
+Enter neighbors of C (space-separated): A E
+Enter vertex: D
+Enter neighbors of D (space-separated): B
+Enter vertex: E
+Enter neighbors of E (space-separated): C
+Enter the starting vertex for DFS: A
+Enter the goal vertex: E

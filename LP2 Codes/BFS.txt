@@ -1,0 +1,91 @@
+from collections import defaultdict, deque
+
+# BFS traversal
+def bfs_traversal(graph, start):
+    visited = set()
+    queue = deque([start])
+
+    while queue:
+        vertex = queue.popleft()
+        if vertex not in visited:
+            print(vertex)
+            visited.add(vertex)
+            for neighbor in graph[vertex]:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+
+# BFS to find shortest path from start to goal
+def bfs_path(graph, start, goal):
+    visited = set()
+    queue = deque([(start, [start])])  # (current_vertex, path)
+
+    while queue:
+        current, path = queue.popleft()
+
+        if current == goal:
+            return path  # found path
+
+        visited.add(current)
+
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                queue.append((neighbor, path + [neighbor]))
+                visited.add(neighbor)  # prevent revisiting
+
+    return None  # goal not reachable
+
+# Build undirected graph from user input
+def build_graph():
+    graph = defaultdict(set)
+    num_vertices = int(input("Enter the number of vertices: "))
+
+    for _ in range(num_vertices):
+        vertex = input("Enter vertex: ")
+        neighbors = input(f"Enter neighbors of {vertex} (space-separated): ").split()
+        for neighbor in neighbors:
+            graph[vertex].add(neighbor)
+            graph[neighbor].add(vertex)  # for undirected graph
+
+    return graph
+
+# Main program
+if __name__ == "__main__":
+    print("Mithilesh Awate")
+    print("Roll No. TBCO22116")
+
+    graph = build_graph()
+    start_vertex = input("Enter the starting vertex for BFS: ")
+    goal_vertex = input("Enter the goal vertex: ")
+
+    print("\nBFS traversal (visiting all reachable nodes):")
+    bfs_traversal(graph, start_vertex)
+
+    print("\nBFS path to goal:")
+    path = bfs_path(graph, start_vertex, goal_vertex)
+    if path:
+        print("Shortest path to goal:", path)
+    else:
+        print("Goal not reachable from start.")
+
+
+
+
+
+OP-------------------------
+
+
+
+Enter the number of vertices: 5
+Enter vertex: A
+Enter neighbors of A (space-separated): B C
+Enter vertex: B
+Enter neighbors of B (space-separated): A D
+Enter vertex: C
+Enter neighbors of C (space-separated): A E
+Enter vertex: D
+Enter neighbors of D (space-separated): B
+Enter vertex: E
+Enter neighbors of E (space-separated): C
+Enter the starting vertex for BFS: A
+Enter the goal vertex: E
+

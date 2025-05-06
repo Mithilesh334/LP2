@@ -1,0 +1,69 @@
+import random
+
+class CustomerSupportChatbot:
+    def __init__(self):
+        self.greetings = [
+            'Hello!', 'Hi!', 'Hey there!', 'Greetings!', 'Good day!', 
+            'Hi there!', 'Hey!', 'What’s up?'
+        ]
+        self.goodbyes = [
+            'Goodbye!', 'See you later!', 'Take care!', 'Bye!', 'Have a great day!', 
+            'Farewell!', 'Catch you later!', 'See you soon!'
+        ]
+        self.faqs = {
+            'hours': 'Our business hours are Monday to Friday, 9 AM to 6 PM.',
+            'location': 'We are located at 123 Main Street, Cityville.',
+            'support': 'For customer support, please contact support@company.com.',
+            'return policy': 'Our return policy allows returns within 30 days of purchase.',
+            'shipping': 'We offer free shipping for orders over $50. For orders under that amount, a $5 shipping fee applies.',
+            'payment methods': 'We accept credit cards, debit cards, PayPal, and Apple Pay.',
+            'order status': 'To check the status of your order, please provide your order number.',
+            'refund': 'Refunds are processed within 5-7 business days after approval.',
+            'availability': 'You can check product availability on our website or contact our support team.'
+        }
+
+    def greet_user(self):
+        return random.choice(self.greetings)
+    
+    def farewell_user(self):
+        return random.choice(self.goodbyes)
+
+    def handle_faq(self, question):
+        question = question.lower()
+        for key in self.faqs:
+            if key in question:
+                return self.faqs[key]
+        return "Sorry, I didn't understand your question. Can you ask me something else?"
+
+    def process_message(self, message):
+        message = message.lower()
+        
+        # Check for greetings
+        if any(greeting in message for greeting in ['hello', 'hi', 'hey', 'good day', 'what’s up']):
+            return self.greet_user()
+        
+        # Check for goodbyes
+        if any(farewell in message for farewell in ['bye', 'goodbye', 'see you', 'take care', 'farewell']):
+            return self.farewell_user()
+        
+        # Handle FAQs
+        return self.handle_faq(message)
+
+
+def chatbot_interface():
+    print("Welcome to Customer Support! How can I help you today?")
+    chatbot = CustomerSupportChatbot()
+    
+    while True:
+        user_input = input("You: ")
+        
+        if 'exit' in user_input.lower():
+            print("Chatbot: " + chatbot.farewell_user())
+            break
+        else:
+            response = chatbot.process_message(user_input)
+            print("Chatbot: " + response)
+
+
+if __name__ == "__main__":
+    chatbot_interface()

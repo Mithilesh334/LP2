@@ -1,0 +1,78 @@
+#job scheduling
+profit = []
+jobs = []
+deadline = []
+heuristics = []  
+
+print("Mithilesh Awate  TBCO22116")
+n = int(input("Enter the number of jobs: "))
+
+for i in range(n):
+    p = int(input(f"Enter the profit of job {i + 1}: "))
+    profit.append(p)
+    
+    j = input(f"Enter the name of job {i + 1}: ")
+    jobs.append(j)
+    
+    d = int(input(f"Enter the deadline of job {i + 1}: "))
+    deadline.append(d)
+    
+    h = int(input(f"Enter the heuristic value for job {i + 1}: "))  
+    heuristics.append(h)
+
+# Combine job info into tuples: (profit, job_name, deadline, heuristic)
+profitNJobs = list(zip(profit, jobs, deadline, heuristics))
+
+# Sort jobs by profit (can be modified to use heuristic if needed)
+profitNJobs = sorted(profitNJobs, key=lambda x: x[0], reverse=True)
+
+# Time slot array to keep track of free slots
+slot = [0] * (n + 1)
+total_profit = 0
+ans = ['null'] * (n + 1)
+
+for i in range(n):
+    job = profitNJobs[i]
+    for j in range(min(n, job[2]), 0, -1):  # Check slots from deadline down to 1
+        if slot[j] == 0:
+            ans[j] = job[1]
+            total_profit += job[0]
+            slot[j] = 1
+            break
+
+print("\nHeuristic function is used to determine job priority. Here, we used profit as the heuristic.")
+print("\nJobs scheduled with Heuristic Values:")
+for i in range(1, n + 1):
+    if ans[i] != 'null':
+        job_index = jobs.index(ans[i])
+        print(f"Job: {ans[i]} | Profit: {profit[job_index]} | Heuristic: {heuristics[job_index]}")
+
+# Output the total profit
+print("\nTotal profit:", total_profit)
+
+
+
+
+0P------------------------
+
+
+
+
+
+Enter the number of jobs:  4
+Enter the profit of job 1:  100
+Enter the name of job 1:  A
+Enter the deadline of job 1:  2
+Enter the heuristic value for job 1:  5
+Enter the profit of job 2:  19
+Enter the name of job 2:  B
+Enter the deadline of job 2:  1
+Enter the heuristic value for job 2:  2
+Enter the profit of job 3:  27
+Enter the name of job 3:  C
+Enter the deadline of job 3:  2
+Enter the heuristic value for job 3:  4
+Enter the profit of job 4:  25
+Enter the name of job 4:  D
+Enter the deadline of job 4:  1
+Enter the heuristic value for job 4:  3

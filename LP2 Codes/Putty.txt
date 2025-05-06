@@ -1,0 +1,4 @@
+step1 - open putty gen app
+2- load the putty key with extention .pem
+3- create ppk  key private
+4- open putty app-  ssh-auth-credential ...put here ppk file 

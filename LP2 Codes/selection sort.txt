@@ -1,0 +1,24 @@
+#selection sort
+def selectionSort(arr):
+    def heuristic(arr):
+        sorted_arr = sorted(arr)
+        heuristic_values = [abs(arr.index(x) - sorted_arr.index(x)) for x in arr]
+        return heuristic_values
+
+    print("\nHeuristic is used to calculate the distance of each element from its target sorted position.\n")
+    
+    for i in range(len(arr)):
+        min_index = i
+        for j in range(i + 1, len(arr)):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+        print(f"Step {i + 1}: Array: {arr} | Heuristic: {heuristic(arr)}")
+    
+    return arr
+
+# Main Execution
+print("Mithilesh Awate  TBCO22116")
+arr = list(map(int, input("Enter the array elements separated by space: ").split()))
+sorted_array = selectionSort(arr)
+print("\nSorted Array:", sorted_array)

@@ -1,0 +1,91 @@
+import sys
+
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = [[0 for _ in range(vertices)] for _ in range(vertices)]
+        self.heuristic = [0] * vertices  # Heuristic (not used in Dijkstra, just for display)
+
+    def minDistance(self, dist, sptSet):
+        min_val = sys.maxsize
+        min_index = -1
+        for u in range(self.V):
+            if not sptSet[u] and dist[u] < min_val:
+                min_val = dist[u]
+                min_index = u
+        return min_index
+
+    def printSolution(self, dist, parent, src):
+        print("\nVertex\tDistance\tPath\t\tHeuristic")
+        for i in range(self.V):
+            if dist[i] == sys.maxsize:
+                print(f"{i}\t∞\t\t-\t\t{self.heuristic[i]}")
+            else:
+                path = self.getPath(parent, i)
+                print(f"{i}\t{dist[i]}\t\t{' -> '.join(map(str, path))}\t\t{self.heuristic[i]}")
+    
+
+    def getPath(self, parent, j):
+        if parent[j] == -1:
+            return [j]
+        return self.getPath(parent, parent[j]) + [j]
+
+    def dijkstra(self, src):
+        dist = [sys.maxsize] * self.V
+        dist[src] = 0
+        sptSet = [False] * self.V
+        parent = [-1] * self.V
+
+        for _ in range(self.V):
+            u = self.minDistance(dist, sptSet)
+            if u == -1:
+                break
+            sptSet[u] = True
+
+            for v in range(self.V):
+                if self.graph[u][v] > 0 and not sptSet[v] and dist[v] > dist[u] + self.graph[u][v]:
+                    dist[v] = dist[u] + self.graph[u][v]
+                    parent[v] = u
+
+        self.printSolution(dist, parent, src)
+
+# ---------- Main Program ----------
+if __name__ == "__main__":
+    print("Mithilesh Awate TBCO22116")
+    vertices = int(input("Enter the number of vertices: "))
+    g = Graph(vertices)
+
+    print("Enter the adjacency matrix (0 if no edge):")
+    for i in range(vertices):
+        g.graph[i] = list(map(int, input(f"Row {i}: ").split()))
+
+    print("Enter heuristic values for each vertex:")
+    g.heuristic = list(map(int, input("Heuristics: ").split()))
+
+    src = int(input("Enter the source vertex: "))
+    g.dijkstra(src)
+
+
+
+
+0p---------------------------
+
+
+
+Mithilesh Awate TBCO22116
+Enter the number of vertices: 4
+Enter the adjacency matrix (0 if no edge):
+Row 0: 0 1 4 0
+Row 1: 1 0 4 2
+Row 2: 4 4 0 3
+Row 3: 0 2 3 0
+Enter heuristic values for each vertex:
+Heuristics: 7 6 2 3
+Enter the source vertex: 0
+
+Vertex  Distance   Path        Heuristic
+0       0          0           7
+1       1          0 -> 1      6
+2       4          0 -> 2      2
+3       3          0 -> 1 -> 3 3
+

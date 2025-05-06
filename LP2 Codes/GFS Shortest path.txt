@@ -1,0 +1,83 @@
+# Greedy Best-First Search with path tracking
+import sys
+
+def greedy_search(graph, source, heuristics):
+    distances = {node: sys.maxsize for node in graph}
+    parents = {node: None for node in graph}
+    distances[source] = 0
+    unvisited = set(graph.keys())
+
+    while unvisited:
+        # Choose node with the lowest heuristic value
+        current_node = min(unvisited, key=lambda node: heuristics[node])
+        unvisited.remove(current_node)
+
+        for neighbor, weight in graph[current_node].items():
+            if neighbor in unvisited:
+                new_distance = distances[current_node] + weight
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    parents[neighbor] = current_node
+
+    return distances, heuristics, parents
+
+def reconstruct_path(parents, node):
+    path = []
+    while node is not None:
+        path.append(node)
+        node = parents[node]
+    return path[::-1]  # reverse
+
+graph = {}
+heuristics = {}
+
+print("Mithilesh Awate  TBCO22116")
+print("Heuristic function is estimated cost from current node to goal node")
+print("Estimated cost from current node to goal")
+n = int(input("Enter the number of edges: "))
+
+for i in range(n):
+    edge = input("Enter the edge (source destination weight): ").split()
+    source, destination, weight = edge[0], edge[1], int(edge[2])
+
+    if source not in graph:
+        graph[source] = {}
+    graph[source][destination] = weight
+
+    if destination not in graph:
+        graph[destination] = {}
+
+for node in graph.keys():
+    h = int(input(f"Enter the heuristic value for node {node}: "))
+    heuristics[node] = h
+
+source = input("Enter the source node: ")
+
+distances, heuristics_values, parents = greedy_search(graph, source, heuristics)
+
+print("\nShortest distances, heuristics, and paths:")
+for node in graph.keys():
+    path = reconstruct_path(parents, node)
+    print(f"Node: {node} | Distance: {distances[node]} | Heuristic: {heuristics_values[node]} | Path: {' -> '.join(path)}")
+
+
+
+
+
+OP-------------------------
+
+
+
+
+Enter the number of edges: 5
+Enter the edge (source destination weight): A B 3
+Enter the edge (source destination weight): A C 1
+Enter the edge (source destination weight): C D 4
+Enter the edge (source destination weight): B D 2
+Enter the edge (source destination weight): D E 1
+Enter the heuristic value for node A: 7
+Enter the heuristic value for node B: 5
+Enter the heuristic value for node C: 2
+Enter the heuristic value for node D: 1
+Enter the heuristic value for node E: 0
+Enter the source node: A

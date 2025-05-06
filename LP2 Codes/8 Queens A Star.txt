@@ -1,0 +1,85 @@
+import heapq
+
+class State:
+    def __init__(self, board, g_cost, h_cost):
+        self.board = board
+        self.g_cost = g_cost
+        self.h_cost = h_cost
+        self.f_cost = g_cost + h_cost
+
+    def __lt__(self, other):
+        return self.f_cost < other.f_cost
+
+def print_board(board):
+    size = len(board)
+    chessboard = [['.' for _ in range(size)] for _ in range(size)]
+    for row in range(size):
+        if board[row] != -1:
+            chessboard[row][board[row]] = 'Q'
+    for row in chessboard:
+        print(" ".join(row))
+    print()
+
+def calculate_heuristic(board):
+    size = len(board)
+    attacks = 0
+    for i in range(size):
+        for j in range(i + 1, size):  # Compare each pair of queens for conflicts
+            if board[i] != -1 and board[j] != -1:
+                if board[i] == board[j] or abs(board[i] - board[j]) == abs(i - j):
+                    attacks += 1  # Count attacks (same column or diagonal)
+    return attacks  # Return the total number of attacking pairs (heuristic)
+
+def get_successors(board):
+    size = len(board)
+    successors = []
+    for row in range(size):
+        if board[row] == -1:  # Find the first row without a queen
+            for col in range(size):
+                new_board = board[:]  # Make a copy of the board
+                new_board[row] = col  # Place the queen in this column for the current row
+                successors.append(new_board)  # Add this new state as a successor
+            break  # Only expand the first empty row
+    return successors  # Return the list of generated successor states
+
+def solve_queens_a_star(start_state):
+    open_list = []  # Priority queue (min-heap) for open states
+    closed_list = set()  # Set to store visited states (avoid cycles)
+    move_count = 0  # Initialize move counter
+
+    initial_h = calculate_heuristic(start_state)  # Calculate the heuristic for the initial state
+    initial_state = State(start_state, 0, initial_h)  # Create the initial state object
+    heapq.heappush(open_list, initial_state)  # Push the initial state into the open list
+
+    while open_list:
+        current_state = heapq.heappop(open_list)  # Pop the state with the lowest f_cost
+        current_board = current_state.board
+        print_board(current_board)  # Print the current board state
+
+        # Check if the solution is reached (no attacking queens and all rows filled)
+        if current_state.h_cost == 0 and -1 not in current_board:
+            print(f"Solution found in {move_count} moves!")
+            print_board(current_board)  # Print the solution
+            return
+        
+        closed_list.add(tuple(current_board))  # Mark this state as visited
+        successors = get_successors(current_board)  # Generate successor states
+        for successor in successors:
+            if tuple(successor) not in closed_list:  # Skip already visited states
+                g_cost = current_state.g_cost + 1  # Increment g_cost (depth)
+                h_cost = calculate_heuristic(successor)  # Calculate the heuristic for the successor
+                successor_state = State(successor, g_cost, h_cost)  # Create the successor state
+                heapq.heappush(open_list, successor_state)  # Push the successor into the open list
+                move_count += 1  # Increment move counter when generating a new state
+
+    print("No solution found.")  # If open_list is empty, no solution was found
+
+def main():
+    size = 8  # Size of the board (8x8 for the 8-Queens problem)
+    start_state = [-1] * size  # Initialize the empty board with -1 (no queens placed yet)
+    print("Mithilesh Awate")
+    print("Roll No. TBCO22116")
+    solve_queens_a_star(start_state)  # Start solving the 8-Queens problem
+
+if __name__ == "__main__":
+    main()  # Run the main function to solve the problem

@@ -1,0 +1,99 @@
+# Kruskal's Algorithm with Heuristic Output
+
+class Graph:
+    def __init__(self, vertices):  # Fixed __init__
+        self.V = vertices
+        self.graph = []
+
+    def addEdge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    def find(self, parent, i):
+        if parent[i] != i:
+            parent[i] = self.find(parent, parent[i])
+        return parent[i]
+
+    def union(self, parent, rank, x, y):
+        if rank[x] < rank[y]:
+            parent[x] = y
+        elif rank[x] > rank[y]:
+            parent[y] = x
+        else:
+            parent[y] = x
+            rank[x] += 1
+
+    def KruskalMST(self, heuristics):
+        result = []  # Store the result MST
+        i = 0  # Index for sorted edges
+        e = 0  # Count of edges in MST
+
+        # Sort all edges in non-decreasing order by weight
+        self.graph = sorted(self.graph, key=lambda item: item[2])
+
+        parent = [i for i in range(self.V)]
+        rank = [0] * self.V
+
+        while e < self.V - 1:
+            u, v, w = self.graph[i]
+            i += 1
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+
+            if x != y:
+                e += 1
+                result.append([u, v, w])
+                self.union(parent, rank, x, y)
+
+        minimumCost = sum([weight for _, _, weight in result])
+
+        print("\nEdges in the constructed MST with Heuristic Values:")
+        for u, v, weight in result:
+            print(f"{u} -- {v} == {weight}, Heuristic Values: {heuristics[u]} - {heuristics[v]}")
+
+        print(f"\nMinimum Spanning Tree Cost: {minimumCost}")
+
+# ---------- Main Program ----------
+if __name__ == '__main__':  # Fixed __name__ check
+    print("Mithilesh Awate  TBCO22116")
+    print("Heuristic here is the edge weight itself; choose the least-cost edge next.")
+
+    vertices = int(input("Enter the number of vertices: "))
+    g = Graph(vertices)
+    edges = int(input("Enter the number of edges: "))
+
+    print("Enter the edges and their weights (u v w):")
+    for i in range(edges):
+        u, v, w = map(int, input().split())
+        g.addEdge(u, v, w)
+
+    heuristics = []
+    print("Enter the heuristic values for each vertex:")
+    for i in range(vertices):
+        h = int(input(f"Heuristic value for vertex {i}: "))
+        heuristics.append(h)
+
+    g.KruskalMST(heuristics)
+
+
+
+
+
+0P-----------------------------------
+
+
+
+
+Vertices: 4  
+Edges: 5  
+Edges (u v w):  
+0 1 10  
+0 2 6  
+0 3 5  
+1 3 15  
+2 3 4  
+
+Heuristics:  
+0 → 2  
+1 → 3  
+2 → 1  
+3 → 4  
